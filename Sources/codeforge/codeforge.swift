@@ -2,7 +2,6 @@
 // https://docs.swift.org/swift-book
 
 import Foundation
-import SwiftPrompt
 
 @main
 struct Main {
@@ -24,11 +23,11 @@ public struct Codeforge {
     }
 
     func run() {
-        Prompt.writeGroupUpdate(title: "Generating codes...")
+        print("Generating codes...")
         let codes = generateCodes(parameters)
-        Prompt.writeGroupUpdate(title: "Saving codes...")
+        print("Saving codes to file(s)...")
         outputCodes(codes)
-        Prompt.endPromptGroup(title: "Finished generating codes!")
+        print("Done!")
         exit(EXIT_SUCCESS)
     }
 
@@ -97,52 +96,48 @@ public struct CodeforgeParameters {
 extension CodeforgeParameters {
 
     static func promptForOptions() -> CodeforgeParameters {
-        Prompt.startPromptGroup(title: "Let's generate some codes!")
+        print("Let's generate some codes!\n")
 
-        let numOfCodes = Prompt.textInput(
-        question: "How many codes would you like to generate?",
-        placeholder: nil,
-        isSecureEntry: false,
-        validator: self.validateNumberInput)
+        print("How many codes would you like to generate? ")
+        guard let numOfCodes = Int(readLine() ?? "") else {
+            print("Please enter a valid number")
+            exit(EXIT_FAILURE)
+        }
 
-        let codeLength = Prompt.textInput(
-        question: "How long should each code be?",
-        placeholder: nil,
-        isSecureEntry: false,
-        validator: self.validateNumberInput)
+        print("How long should each code be (excluding dashes)? ")
+        guard let codeLength = Int(readLine() ?? "") else {
+            print("Please enter a valid number")
+            exit(EXIT_FAILURE)
+        }
 
-        let charactersBetweenDashes = Prompt.textInput(
-        question: "How many characters between dashes?",
-        placeholder: nil,
-        isSecureEntry: false,
-        validator: self.validateNumberInput)
+        print("How many characters between dashes? ")
+        guard let charactersBetweenDashes = Int(readLine() ?? "") else {
+            print("Please enter a valid number")
+            exit(EXIT_FAILURE)
+        }
 
-        let codesPerFile = Prompt.textInput(
-        question: "How many codes would you like to save per file?",
-        placeholder: nil,
-        isSecureEntry: false,
-        validator: self.validateNumberInput)
+        print("How many codes per file? ")
+        guard let codesPerFile = Int(readLine() ?? "") else {
+            print("Please enter a valid number")
+            exit(EXIT_FAILURE)
+        }
 
-        let filename = Prompt.textInput(
-        question: "What would you like to name the file?",
-        placeholder: nil,
-        isSecureEntry: false,
-        validator: { input in
-            return input.isEmpty ? .invalid(message: "Please enter a valid filename") : .valid
-            }
-        )
-
+        print("What would you like to name the file(s)? Enter a name without a file extension: ")
+        guard let filename = readLine() else {
+            print("Please enter a valid filename")
+            exit(EXIT_FAILURE)
+        }
 
         return CodeforgeParameters(
-            numOfCodes: Int(numOfCodes)!,
-            codeLength: Int(codeLength)!,
-            charactersBetweenDashes: Int(charactersBetweenDashes)!,
-            codesPerFile: Int(codesPerFile)!,
+            numOfCodes: numOfCodes,
+            codeLength: codeLength,
+            charactersBetweenDashes: charactersBetweenDashes,
+            codesPerFile: codesPerFile,
             filename: filename
         )
     }
 
-    static func validateNumberInput(_ input: String) -> ValidationResult {
-        return Int(input) != nil ? .valid : .invalid(message: "Please enter a valid number")
-    }
+    //static func validateNumberInput(_ input: String) -> ValidationResult {
+    //    return Int(input) != nil ? .valid : .invalid(message: "Please enter a valid number")
+    //}
 }

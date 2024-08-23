@@ -11,16 +11,10 @@ let package = Package(
             name: "codeforge",
             targets: ["codeforge"]),
     ],
-    dependencies: [
-    .package(url: "https://github.com/CheekyGhost-Labs/SwiftPrompt.git", from: "1.0.0"),
-    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
-        .executableTarget(name: "codeforge",
-            dependencies: [
-                .product(name: "SwiftPrompt", package: "SwiftPrompt")
-            ]),
+        .executableTarget(name: "codeforge"),
         .testTarget(
             name: "codeforgeTests",
             dependencies: ["codeforge"]),
