@@ -2,6 +2,7 @@
 // https://docs.swift.org/swift-book
 
 import Foundation
+import Progress
 
 @main
 struct Main {
@@ -54,10 +55,15 @@ public struct Codeforge {
 
     func generateCodes(_ parameters: CodeforgeParameters) -> Set<String> {
         var codes: Set<String> = []
+
+        var progressBar = ProgressBar(count: parameters.numOfCodes)
+
         while codes.count < parameters.numOfCodes {
             let code = generateCode()
             codes.insert(code)
+            progressBar.next()
         }
+
         return codes
     }
 
@@ -137,7 +143,4 @@ extension CodeforgeParameters {
         )
     }
 
-    //static func validateNumberInput(_ input: String) -> ValidationResult {
-    //    return Int(input) != nil ? .valid : .invalid(message: "Please enter a valid number")
-    //}
 }

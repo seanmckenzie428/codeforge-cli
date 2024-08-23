@@ -11,10 +11,16 @@ let package = Package(
             name: "codeforge",
             targets: ["codeforge"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/jkandzi/Progress.swift.git", from: "0.4.0")
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
-        .executableTarget(name: "codeforge"),
+        .executableTarget(name: "codeforge",
+            dependencies: [
+                .product(name: "Progress", package: "progress.swift")
+            ]),
         .testTarget(
             name: "codeforgeTests",
             dependencies: ["codeforge"]),
