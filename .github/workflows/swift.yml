@@ -20,7 +20,7 @@ jobs:
     - name: Set up Swift
       uses: fwal/setup-swift@v2
       with:
-        swift-version: '5.10'  # Use Swift 5.10 for the build
+        swift-version: '5.9'  # Use Swift 5.9 for the build
 
     - name: Build the project
       run: swift build -c release
