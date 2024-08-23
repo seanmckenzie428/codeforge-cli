@@ -105,28 +105,16 @@ extension CodeforgeParameters {
         print("Let's generate some codes!\n")
 
         print("How many codes would you like to generate? ")
-        guard let numOfCodes = Int(readLine() ?? "") else {
-            print("Please enter a valid number")
-            exit(EXIT_FAILURE)
-        }
+        let numOfCodes = readInt()
 
         print("How long should each code be (excluding dashes)? ")
-        guard let codeLength = Int(readLine() ?? "") else {
-            print("Please enter a valid number")
-            exit(EXIT_FAILURE)
-        }
+        let codeLength = readInt()
 
         print("How many characters between dashes? ")
-        guard let charactersBetweenDashes = Int(readLine() ?? "") else {
-            print("Please enter a valid number")
-            exit(EXIT_FAILURE)
-        }
+        let charactersBetweenDashes = readInt()
 
         print("How many codes per file? ")
-        guard let codesPerFile = Int(readLine() ?? "") else {
-            print("Please enter a valid number")
-            exit(EXIT_FAILURE)
-        }
+        let codesPerFile = readInt()
 
         print("What would you like to name the file(s)? Enter a name without a file extension: ")
         guard let filename = readLine() else {
@@ -141,6 +129,14 @@ extension CodeforgeParameters {
             codesPerFile: codesPerFile,
             filename: filename
         )
+    }
+
+    static func readInt() -> Int {
+        guard let input = readLine(), let number = Int(input) else {
+            print("Please enter a valid number")
+            exit(EXIT_FAILURE)
+        }
+        return number
     }
 
 }
