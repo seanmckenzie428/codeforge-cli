@@ -1,29 +1,85 @@
-# This workflow will build a Swift project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
-
-name: Swift
+name: Swift Build and Release
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags:
+      - 'v*'  # Triggers the workflow on version tags (e.g., v1.0.0)
+  workflow_dispatch:  # Allows manual triggering of the workflow
 
 jobs:
-  swiftpm:
-    name: SwiftPM - Swift ${{ matrix.swift-version }} on ${{ matrix.os }}
+  build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ['macos-latest', 'ubuntu-latest', 'windows-latest']
-        swift-version: ['5.10']
-      fail-fast: false
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: sushichop/gha-swift-env@v1.0.5
-        with:
-          swift-version: ${{ matrix.swift-version }}
-      - name: Build and test a Swift package
-        run: |
-          swift build -v -c release
-          swift test -v -Xswiftc -warnings-as-errors
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Swift
+      uses: fwal/setup-swift@v2
+      with:
+        swift-version: '5.10'  # Use Swift 5.10 for the build
+
+    - name: Build the project
+      run: swift build -c release
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: codeforge-${{ runner.os }}
+        path: .build/release/codeforge  # Adjust this path if necessary
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: ./artifacts
+
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref_name }}
+        draft: false
+        prerelease: false
+
+    - name: Upload macOS binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifacts/codeforge-macos-latest
+        asset_name: codeforge-macos
+        asset_content_type: application/octet-stream
+
+    - name: Upload Linux binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifacts/codeforge-ubuntu-latest
+        asset_name: codeforge-linux
+        asset_content_type: application/octet-stream
+
+    - name: Upload Windows binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifacts/codeforge-windows-latest.exe
+        asset_name: codeforge-windows.exe
+        asset_content_type: application/octet-stream
