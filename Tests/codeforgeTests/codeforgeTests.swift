@@ -2,11 +2,10 @@ import XCTest
 @testable import codeforge
 
 final class codeforgeTests: XCTestCase {
-    func testExample() throws {
-        // XCTest Documentation
-        // https://developer.apple.com/documentation/xctest
-
-        // Defining Test Cases and Test Methods
-        // https://developer.apple.com/documentation/xctest/defining_test_cases_and_test_methods
+    func testGenerateCode() {
+        let parameters = CodeforgeParameters(numOfCodes: 1, codeLength: 10, charactersBetweenDashes: 100)
+        let codeforge = Codeforge(parameters)
+        let code = codeforge.generateCode()
+        XCTAssertEqual(code.count, 10)
     }
 }
