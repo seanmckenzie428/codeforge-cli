@@ -60,8 +60,10 @@ public struct Codeforge {
 
         while codes.count < parameters.numOfCodes {
             let code = generateCode()
-            codes.insert(code)
-            progressBar.next()
+            let (inserted, _) = codes.insert(code)
+            if (inserted) {
+                progressBar.next()
+            }
         }
 
         return codes
