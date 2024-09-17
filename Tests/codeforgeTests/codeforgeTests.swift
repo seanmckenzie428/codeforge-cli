@@ -1,28 +1,29 @@
-import XCTest
+import Testing
+
 @testable import codeforge
 
-final class codeforgeTests: XCTestCase {
-    func testGenerateCode() {
-        let parameters = CodeforgeParameters(numOfCodes: 1, codeLength: 10, charactersBetweenDashes: 100)
-        let codeforge = Codeforge(parameters)
-        let code = codeforge.generateCode()
-        XCTAssertEqual(code.count, 10)
-    }
+@Test("Generate Single Code") func generateCode() {
+    let codeLength = 15
+    let numOfCodes = 1
+    let charactersBetweenDashes = 5
+    let params = CodeforgeParameters(
+        numOfCodes: numOfCodes, codeLength: codeLength,
+        charactersBetweenDashes: charactersBetweenDashes
+    )
+    let forge = Codeforge(params)
+    let code = forge.generateCode()
+    let codeChunks = code.split(separator: "-")
 
-    func testGenerateCodeWithDashes() {
-        let parameters = CodeforgeParameters(numOfCodes: 1, codeLength: 15, charactersBetweenDashes: 5)
-        let codeforge = Codeforge(parameters)
-        let code = codeforge.generateCode()
-        let chunks = code.split(separator: "-")
+    #expect(codeChunks.count == codeLength / charactersBetweenDashes)
+    #expect(codeChunks[0].count == charactersBetweenDashes)
+}
 
-        XCTAssertEqual(chunks.count, 3)
-        XCTAssertEqual(chunks[0].count, 5)
-    }
+@Test("Generate Multiple Codes") func generateCodes() {
+    let params = CodeforgeParameters(
+        numOfCodes: 10, codeLength: 15, charactersBetweenDashes: 5
+    )
+    let forge = Codeforge(params)
+    let codes = forge.generateCodes(params)
 
-    func testGenerateCodes() {
-        let parameters = CodeforgeParameters(numOfCodes: 10, codeLength: 10, charactersBetweenDashes: 100)
-        let codeforge = Codeforge(parameters)
-        let codes = codeforge.generateCodes(parameters)
-        XCTAssertEqual(codes.count, 10)
-    }
+    #expect(codes.count == 10)
 }
