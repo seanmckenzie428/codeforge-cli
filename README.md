@@ -9,7 +9,7 @@ Codeforge is a Swift-based command-line tool designed to generate random, unique
 Follow these steps to install Codeforge:
 
 1. **Download the Prebuilt Binary**:
-   Visit the [Codeforge Releases Page](https://github.com/your-username/codeforge/releases) on GitHub and download the latest release for your operating system.
+   Visit the [Codeforge Releases Page](https://github.com/seanmckenzie428/codeforge-cli/releases) on GitHub and download the latest release for your operating system.
 
 2. **Install the Executable**:
    After downloading, move the binary to a directory in your PATH for easier access:
