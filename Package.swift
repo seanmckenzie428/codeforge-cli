@@ -5,11 +5,12 @@ import PackageDescription
 
 let package = Package(
     name: "codeforge",
+    platforms: [.macOS(.v10_15)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .executable(
             name: "codeforge",
-            targets: ["codeforge"]),
+            targets: ["codeforge"])
     ],
     dependencies: [
         .package(url: "https://github.com/jkandzi/Progress.swift.git", from: "0.4.0")
@@ -17,7 +18,8 @@ let package = Package(
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
-        .executableTarget(name: "codeforge",
+        .executableTarget(
+            name: "codeforge",
             dependencies: [
                 .product(name: "Progress", package: "progress.swift")
             ]),

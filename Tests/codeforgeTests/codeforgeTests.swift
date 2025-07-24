@@ -2,7 +2,8 @@ import Testing
 
 @testable import codeforge
 
-@Test("Generate Single Code") func generateCode() {
+@Test("Generate Single Code")
+func generateCode() {
     let codeLength = 15
     let numOfCodes = 1
     let charactersBetweenDashes = 5
@@ -18,7 +19,8 @@ import Testing
     #expect(codeChunks[0].count == charactersBetweenDashes)
 }
 
-@Test("Generate Multiple Codes") func generateCodes() {
+@Test("Generate Multiple Codes")
+func generateCodes() {
     let params = CodeforgeParameters(
         numOfCodes: 10, codeLength: 15, charactersBetweenDashes: 5
     )
