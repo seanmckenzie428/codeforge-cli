@@ -34,7 +34,7 @@ Once installed, you can run Codeforge from the terminal:
 codeforge
 ```
 
-The program will prompt you for options and parameters to execute its functionality.
+The program will prompt you for options and parameters to execute its functionality. The output files will be saved wherever you called `codeforge` from.
 
 ---
 
